@@ -3645,7 +3645,7 @@ title = "Coloring book"
 [coloringBook.tooltip.description]
 bullet1 = "Pictures go in the same order as your files. Reorder them in the file editor."
 bullet2 = "Every page is A4. Wide pictures get a landscape page."
-text = "Puts each picture on its own page with a blank page after it, so when you print double-sided the back of every picture is empty and colours can't show through."
+text = "Puts each picture on its own page with a blank page after it, so when you print double-sided the back of every picture is empty and colors can't show through."
 title = "What it does"
 
 [coloringBook.tooltip.header]

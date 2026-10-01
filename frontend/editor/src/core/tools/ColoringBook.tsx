@@ -47,6 +47,7 @@ const ColoringBook = (props: BaseToolProps) => {
       onClick: base.handleExecute,
       endpointEnabled: base.endpointEnabled,
       paramsValid: base.params.validateParameters(),
+      disableScopeHints: true,
     },
     review: {
       isVisible: base.hasResults,

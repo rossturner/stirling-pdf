@@ -12,6 +12,7 @@ import {
   LinkToolRegistry,
 } from "@app/data/toolsTaxonomy";
 import { isSuperToolId, isLinkToolId } from "@app/types/toolId";
+import { toolIOFor } from "@app/types/toolIO";
 import {
   asRegistryConfig,
   lazySettings,
@@ -33,7 +34,6 @@ import {
   coloringBookOperationConfig,
   COLORING_BOOK_ENDPOINT,
 } from "@app/hooks/tools/coloringBook/useColoringBookOperation";
-import { toolIOFor } from "@app/types/toolIO";
 import { createPortfolioOperationConfig } from "@app/hooks/tools/createPortfolio/useCreatePortfolioOperation";
 import { unlockPdfFormsOperationConfig } from "@app/hooks/tools/unlockPdfForms/useUnlockPdfFormsOperation";
 import { autoFormDetectionOperationConfig } from "@app/hooks/tools/autoFormDetection/useAutoFormDetectionOperation";

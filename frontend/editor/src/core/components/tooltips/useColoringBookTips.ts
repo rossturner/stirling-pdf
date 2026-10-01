@@ -13,7 +13,7 @@ export const useColoringBookTips = (): TooltipContent => {
         title: t("coloringBook.tooltip.description.title", "What it does"),
         description: t(
           "coloringBook.tooltip.description.text",
-          "Puts each picture on its own page with a blank page after it, so when you print double-sided the back of every picture is empty and colours can't show through.",
+          "Puts each picture on its own page with a blank page after it, so when you print double-sided the back of every picture is empty and colors can't show through.",
         ),
         bullets: [
           t(
