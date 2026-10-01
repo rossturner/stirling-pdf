@@ -370,6 +370,12 @@ class CbzToPdfParams(ApiModel):
     optimize_for_ebook: bool = Field(False, description="Optimize the output PDF for ebook reading using Ghostscript")
 
 
+class ColoringBookParams(ApiModel):
+    """
+    This endpoint converts one or more images into a PDF where each generated image page is followed by a blank page. Input:IMAGE Output:PDF Type:MISO
+    """
+
+
 class LineArtEdgeLevel(IntEnum):
     """
     Edge detection strength to use for line art conversion (1-3). This maps to ImageMagick's -edge radius.
@@ -1803,6 +1809,7 @@ class Model(
     RootModel[
         CbrToPdfParams
         | CbzToPdfParams
+        | ColoringBookParams
         | EbookToPdfParams
         | EmlToPdfParams
         | FileToPdfParams
@@ -1882,6 +1889,7 @@ class Model(
     root: (
         CbrToPdfParams
         | CbzToPdfParams
+        | ColoringBookParams
         | EbookToPdfParams
         | EmlToPdfParams
         | FileToPdfParams
@@ -1962,6 +1970,7 @@ class Model(
 type ParamToolModel = (
     CbrToPdfParams
     | CbzToPdfParams
+    | ColoringBookParams
     | EbookToPdfParams
     | EmlToPdfParams
     | FileToPdfParams
@@ -2043,6 +2052,7 @@ type ParamToolModelType = type[ParamToolModel]
 class ToolEndpoint(StrEnum):
     CBR_TO_PDF = "/api/v1/convert/cbr/pdf"
     CBZ_TO_PDF = "/api/v1/convert/cbz/pdf"
+    COLORING_BOOK = "/api/v1/convert/coloring-book"
     EBOOK_TO_PDF = "/api/v1/convert/ebook/pdf"
     EML_TO_PDF = "/api/v1/convert/eml/pdf"
     FILE_TO_PDF = "/api/v1/convert/file/pdf"
@@ -2122,6 +2132,7 @@ class ToolEndpoint(StrEnum):
 OPERATIONS: dict[ToolEndpoint, ParamToolModelType] = {
     ToolEndpoint.CBR_TO_PDF: CbrToPdfParams,
     ToolEndpoint.CBZ_TO_PDF: CbzToPdfParams,
+    ToolEndpoint.COLORING_BOOK: ColoringBookParams,
     ToolEndpoint.EBOOK_TO_PDF: EbookToPdfParams,
     ToolEndpoint.EML_TO_PDF: EmlToPdfParams,
     ToolEndpoint.FILE_TO_PDF: FileToPdfParams,
