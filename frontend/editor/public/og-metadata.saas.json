@@ -226,6 +226,11 @@
       "title": "Create Portfolio - Stirling PDF",
       "description": "Bundle multiple files into an Adobe PDF Portfolio"
     },
+    "coloringBook": {
+      "image": "/og_images/home.png",
+      "title": "Coloring Book - Stirling PDF",
+      "description": "Turn images into a printable coloring book with a blank back behind every page"
+    },
     "changeMetadata": {
       "image": "/og_images/change-metadata.png",
       "title": "Edit PDF Metadata - Stirling PDF",
@@ -822,6 +827,7 @@
     "/add-stamp": "addStamp",
     "/add-attachments": "addAttachments",
     "/create-portfolio": "createPortfolio",
+    "/coloring-book": "coloringBook",
     "/change-metadata": "changeMetadata",
     "/overlay-pdfs": "overlayPdfs",
     "/get-pdf-info": "getPdfInfo",
@@ -1048,6 +1054,10 @@
     {
       "path": "/classify",
       "label": "Classify"
+    },
+    {
+      "path": "/coloring-book",
+      "label": "Coloring Book"
     },
     {
       "path": "/single-large-page",
