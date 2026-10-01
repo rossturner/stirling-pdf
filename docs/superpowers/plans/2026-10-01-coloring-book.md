@@ -216,7 +216,7 @@ Build `ColoringBook.tsx` with `useBaseTool` and `createToolFlow` so file selecti
 
 - [ ] **Step 5: Add English-US copy and mapper coverage**
 
-Add `[home.coloringBook]` title, description, and search tags to `translation.toml`, plus concise fixed-layout guidance under a `[coloringBook]` section. Add `coloringBookOperationConfig` to `migratedToolMappers.test.ts`.
+Add `[home.coloringBook]` title, description, and search tags to `translation.toml`, plus concise fixed-layout guidance under a `[coloringBook]` section. Add `coloringBookOperationConfig` to `migratedToolMappers.test.ts`. Run `task pre-commit:fix` after changing the translation file.
 
 - [ ] **Step 6: Run focused frontend tests**
 
