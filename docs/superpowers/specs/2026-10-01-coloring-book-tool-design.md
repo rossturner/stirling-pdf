@@ -71,7 +71,9 @@ separate pass:
    `colorType = "color"`. The loop that `imageToPdf` runs over its input is
    extracted into a private method that both public methods call, so it isn't
    duplicated.
-3. Take a snapshot of the image pages (`List.copyOf(doc.getPages())`). For each
+3. Take a snapshot of the image pages into a list with
+   `doc.getPages().forEach(...)` (`PDPageTree` is not a `Collection`, so
+   `List.copyOf` does not apply). For each
    page, insert a blank after it with
    `doc.getPages().insertAfter(new PDPage(new PDRectangle(w, h)), page)`, where
    `w` and `h` are that page's mediabox width and height. A fresh `PDRectangle`
@@ -143,8 +145,10 @@ scheduling.
   `useToolOperation`.
 
 **Component**: `core/tools/ColoringBook.tsx`, using `useBaseTool(..., { ignoreViewerScope: true })`
-+ `createToolFlow` with no settings steps. `ignoreViewerScope` stops the viewer
-from narrowing the input to the one image on display. It has the file list, a
++ `createToolFlow` with one information step ("Double-sided printing") that carries
+the tooltip. `ignoreViewerScope` stops the viewer from narrowing the input to the
+one image on display, so the execute button sets `disableScopeHints` to drop the
+single-file scope hints (all loaded images are processed). It has the file list, a
 "Create coloring book" execute button and the review panel. A
 `useColoringBookTips.ts` tooltip explains the alternating image and blank pages
 and that the output is meant for double-sided printing.
@@ -152,7 +156,7 @@ and that the output is meant for double-sided printing.
 **Translations** (`public/locales/en-US/translation.toml` only, then
 `task pre-commit:fix`):
 - `home.coloringBook.{title, desc, tags}` (`tags` feeds `getSynonyms`)
-- `coloringBook.{submit, filenamePrefix, results.title, error.failed, tooltip.*}`
+- `coloringBook.{submit, info.{title, text}, results.title, error.failed, tooltip.*}`
 
 ## Testing
 
