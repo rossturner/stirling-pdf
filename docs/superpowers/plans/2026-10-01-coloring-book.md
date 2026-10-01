@@ -225,7 +225,7 @@ Run the command from Step 2 and:
 task frontend:test:editor
 ```
 
-Expected: focused form-data order and registry assertions pass, as does the editor test suite.
+Expected: focused form-data order and registry assertions pass. The full editor suite may report the two known baseline failures in `src/proprietary/routes/AuthCallback.test.tsx`; reproduce those against the pre-Task-4 revision and record them as baseline blockers, not Coloring Book failures. No new test failures may be introduced.
 
 - [ ] **Step 7: Commit**
 
@@ -250,7 +250,7 @@ task frontend:check
 task engine:check
 ```
 
-Expected: all generated-contract, backend, frontend, and engine checks pass.
+Expected: `task tool-models:check` and `task engine:check` pass. Run the backend and frontend checks; if they fail on the already observed host issues (JPDFium's GLIBC requirement, unrelated YAML formatting, or the two AuthCallback tests), record the exact output and verify it is unchanged from the relevant baseline. Do not change unrelated files to hide those failures. All feature-scoped tests must pass.
 
 - [ ] **Step 2: Commit any check-driven corrections**
 
