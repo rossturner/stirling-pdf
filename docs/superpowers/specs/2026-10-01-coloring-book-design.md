@@ -19,7 +19,7 @@ The existing image conversion utility expands each frame in a multi-frame TIFF t
 
 ### Frontend
 
-Register a dedicated tool named **Coloring Book** in the standard tool registry under `Page Formatting`. Use the standard multi-file tool flow and `FileContext` selection rather than adding a separate upload or file-processing path. Restrict the tool’s supported formats to the image formats accepted by the existing image converter and allow multiple files.
+Register a dedicated tool named **Coloring Book** in the standard tool registry under `Page Formatting`. Use the standard multi-file tool flow and `FileContext` selection rather than adding a separate upload or file-processing path. Restrict the tool’s supported formats to the image formats accepted by the existing image converter and allow multiple files. Add its regular tool ID to the backend `ToolKeyRegistry` as well; the existing parity test requires every frontend tool ID to be recognized by backend usage tracking.
 
 The operation sends the selected images, in selected-file order, to the dedicated endpoint. Form-data construction must append image files in that order. Use the standard operation result view, preview, download, and error handling. Use `coloring-book` as the endpoint availability key. Add the tool’s title, description, and search tags under `[home.coloringBook]` in `frontend/editor/public/locales/en-US/translation.toml`, following the neighboring home-tool entries.
 

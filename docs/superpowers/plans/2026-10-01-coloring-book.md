@@ -35,7 +35,7 @@
 | File | Responsibility |
 |---|---|
 | `app/common/src/main/java/stirling/software/common/util/PdfUtils.java` | Convert the files with fixed Coloring Book layout and interleave blank pages. |
-| `app/common/src/test/java/stirling/software/common/util/PdfUtilsTest.java` | Verify page order, dimensions, image fit, and TIFF frame behavior. |
+| `app/common/src/test/java/stirling/software/common/util/PdfUtilsTest.java` | Verify page order across mixed image formats, dimensions, image fit, and TIFF frame behavior. |
 | `app/core/src/main/java/stirling/software/SPDF/model/api/converters/ColoringBookRequest.java` | Required multipart image input, with no layout parameters. |
 | `app/core/src/main/java/stirling/software/SPDF/controller/api/converters/ConvertImgPDFController.java` | Dedicated multipart endpoint and PDF response. |
 | `app/common/src/main/java/stirling/software/SPDF/config/EndpointConfiguration.java` | Register the distinct key in Convert and Java groups. |
@@ -44,6 +44,8 @@
 | `app/common/src/test/java/stirling/software/SPDF/config/EndpointConfigurationGapTest.java` | Endpoint-group disable behavior. |
 | `frontend/editor/src/core/types/toolApiTypes.ts`, `toolIO.ts`, `engine/src/stirling/models/tool_models.py`, `tool_io.py` | Generated API and tool-I/O contracts; update with `task tool-models`. |
 | `frontend/editor/src/core/types/toolId.ts` | Add the `coloringBook` tool identity. |
+| `app/proprietary/src/main/java/stirling/software/proprietary/service/ToolKeyRegistry.java` | Mirror the frontend tool ID for backend usage tracking. |
+| `app/proprietary/src/test/java/stirling/software/proprietary/service/ToolKeyRegistryTest.java` | Verify the new core ID remains in parity with the frontend registry. |
 | `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookParameters.ts` | Parameterless configuration and endpoint availability key. |
 | `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookOperation.ts` | Typed multi-file request and operation configuration. |
 | `frontend/editor/src/core/tools/ColoringBook.tsx` | Standard file, execution, and result workflow. |
@@ -65,7 +67,7 @@
 - [ ] **Step 1: Write failing PDF sequence tests**
 
 Add tests that call `imageToPdfWithBlankPages` with generated valid images and assert:
-- Two images produce four portrait-A4 pages; rendered image pages preserve the first/second image order and each intervening/final page is white.
+- A PNG followed by a JPEG produces four portrait-A4 pages; rendered image pages preserve the first/second image order and each intervening/final page is white.
 - Very wide and very tall image content fits within the page without distortion.
 - A two-frame TIFF produces `frame 1, blank, frame 2, blank`.
 - An unreadable image throws rather than returning PDF bytes.
@@ -180,6 +182,8 @@ git commit -m "chore: generate Coloring Book endpoint models"
 
 **Files:**
 - Modify: `frontend/editor/src/core/types/toolId.ts`
+- Modify: `app/proprietary/src/main/java/stirling/software/proprietary/service/ToolKeyRegistry.java`
+- Test: `app/proprietary/src/test/java/stirling/software/proprietary/service/ToolKeyRegistryTest.java`
 - Create: `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookParameters.ts`
 - Create: `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookOperation.ts`
 - Create: `frontend/editor/src/core/tools/ColoringBook.tsx`
@@ -195,7 +199,7 @@ git commit -m "chore: generate Coloring Book endpoint models"
 
 - [ ] **Step 1: Write failing operation and registration tests**
 
-Assert that `buildColoringBookFormData` appends every file under `fileInput` in the input array’s order. Assert that the translated registry contains `coloringBook` in `SubcategoryId.PAGE_FORMATTING`, uses endpoint key `"coloring-book"`, exposes the operation config, sets `maxFiles` to `-1`, and sets supported formats to the generated endpoint’s image `inputExtensions`.
+Assert that `buildColoringBookFormData` appends every file under `fileInput` in the input array’s order. Assert that the translated registry contains `coloringBook` in `SubcategoryId.PAGE_FORMATTING`, uses endpoint key `"coloring-book"`, exposes the operation config, sets `maxFiles` to `-1`, and sets supported formats to the generated endpoint’s nonempty image `inputExtensions`. Run the existing `ToolKeyRegistryTest` before changing the backend mirror and confirm it fails because `coloringBook` is absent.
 
 - [ ] **Step 2: Run the focused frontend tests and confirm they fail**
 
@@ -208,7 +212,7 @@ Expected: tests fail because the Coloring Book operation and registry entry are 
 
 - [ ] **Step 3: Add the tool identity, parameters, and multi-file operation**
 
-Add `"coloringBook"` to `CORE_REGULAR_TOOL_IDS`. Define empty default parameters with endpoint name `"coloring-book"`. Export `buildColoringBookFormData(_parameters: ColoringBookParameters, files: File[]): FormData` using `fileOnlyMapping` and `objectToFormData(..., { fileInput: files })`. Bind `defineMultiFileTool` to `"/api/v1/convert/coloring-book" satisfies ToolEndpoint`; set `operationType: "coloringBook"` and `filePrefix: "coloring-book_"`.
+Add `"coloringBook"` to `CORE_REGULAR_TOOL_IDS` and `ToolKeyRegistry.DEFAULT_KEYS`. Define empty default parameters with endpoint name `"coloring-book"`. Export `buildColoringBookFormData(_parameters: ColoringBookParameters, files: File[]): FormData` using `fileOnlyMapping` and `objectToFormData(..., { fileInput: files })`. Bind `defineMultiFileTool` to `"/api/v1/convert/coloring-book" satisfies ToolEndpoint`; set `operationType: "coloringBook"` and `filePrefix: "coloring-book_"`.
 
 - [ ] **Step 4: Add the tool component and registry entry**
 
@@ -225,12 +229,18 @@ Run the command from Step 2 and:
 task frontend:test:editor
 ```
 
+Also run:
+```bash
+./gradlew :proprietary:test --tests stirling.software.proprietary.service.ToolKeyRegistryTest
+./gradlew :common:test --tests stirling.software.common.util.PdfUtilsTest
+```
+
 Expected: focused form-data order and registry assertions pass. The full editor suite may report the two known baseline failures in `src/proprietary/routes/AuthCallback.test.tsx`; reproduce those against the pre-Task-4 revision and record them as baseline blockers, not Coloring Book failures. No new test failures may be introduced.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add frontend/editor/src/core/types/toolId.ts frontend/editor/src/core/hooks/tools/coloringBook frontend/editor/src/core/tools/ColoringBook.tsx frontend/editor/src/core/data/useTranslatedToolRegistry.tsx frontend/editor/src/core/hooks/tools/shared/migratedToolMappers.test.ts frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx frontend/editor/public/locales/en-US/translation.toml
+git add frontend/editor/src/core/types/toolId.ts app/proprietary/src/main/java/stirling/software/proprietary/service/ToolKeyRegistry.java app/proprietary/src/test/java/stirling/software/proprietary/service/ToolKeyRegistryTest.java frontend/editor/src/core/hooks/tools/coloringBook frontend/editor/src/core/tools/ColoringBook.tsx frontend/editor/src/core/data/useTranslatedToolRegistry.tsx frontend/editor/src/core/hooks/tools/shared/migratedToolMappers.test.ts frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx frontend/editor/public/locales/en-US/translation.toml
 git commit -m "feat: add Coloring Book frontend tool"
 ```
 
