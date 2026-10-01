@@ -23,6 +23,7 @@ import { certSignOperationConfig } from "@app/hooks/tools/certSign/useCertSignOp
 import { changeMetadataOperationConfig } from "@app/hooks/tools/changeMetadata/useChangeMetadataOperation";
 import { changePermissionsOperationConfig } from "@app/hooks/tools/changePermissions/useChangePermissionsOperation";
 import { cropOperationConfig } from "@app/hooks/tools/crop/useCropOperation";
+import { coloringBookOperationConfig } from "@app/hooks/tools/coloringBook/useColoringBookOperation";
 import { editTableOfContentsOperationConfig } from "@app/hooks/tools/editTableOfContents/useEditTableOfContentsOperation";
 import { extractImagesOperationConfig } from "@app/hooks/tools/extractImages/useExtractImagesOperation";
 import { flattenOperationConfig } from "@app/hooks/tools/flatten/useFlattenOperation";
@@ -63,6 +64,7 @@ const MIGRATED_CONFIGS = [
   certSignOperationConfig,
   changeMetadataOperationConfig,
   changePermissionsOperationConfig,
+  coloringBookOperationConfig,
   cropOperationConfig,
   editTableOfContentsOperationConfig,
   extractImagesOperationConfig,

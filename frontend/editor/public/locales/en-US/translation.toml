@@ -3629,6 +3629,19 @@ tooltip = "This operation will use your cloud credits"
 [color.eyeDropper]
 tooltip = "Pick color from screen"
 
+[coloringBook]
+blankPageRule = "A blank portrait A4 page is added after every generated page for duplex printing."
+fixedLayout = "Each image is centered on a portrait A4 page at its original aspect ratio."
+orderHint = "Files are processed in the order shown in your selected-file list."
+submit = "Create Coloring Book"
+title = "Coloring Book"
+
+[coloringBook.error]
+failed = "An error occurred while creating the coloring book PDF."
+
+[coloringBook.results]
+title = "Coloring Book Results"
+
 [colorPicker]
 hue = "Hue"
 saturation = "Saturation and brightness"
@@ -5608,6 +5621,11 @@ title = "Change Permissions"
 [home.classify]
 desc = "Identify what kind of document this is and tag it."
 title = "Classify"
+
+[home.coloringBook]
+desc = "Turn one or more images into a duplex-ready coloring book PDF with a blank page after every image page"
+tags = "coloring book,duplex,images to pdf,blank back,children,activity,printable,portrait a4,image sequence,image order"
+title = "Coloring Book"
 
 [home.compare]
 desc = "Compares and shows the differences between 2 PDF Documents"
