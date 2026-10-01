@@ -54,6 +54,7 @@
 | `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookOperation.test.ts` | Verify multipart files retain caller order. |
 | `frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx` | Verify placement, formats, and endpoint registration. |
 | `frontend/editor/public/locales/en-US/translation.toml` | English-US title, description, tags, and fixed-layout guidance. |
+| `frontend/editor/public/og-metadata.json`, `og-metadata.saas.json` | Generated social-preview manifests kept in sync with the new regular tool. |
 
 ## Task 1: Build and Test the PDF Sequence
 
@@ -192,6 +193,8 @@ git commit -m "chore: generate Coloring Book endpoint models"
 - Create: `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookOperation.test.ts`
 - Create: `frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx`
 - Modify: `frontend/editor/public/locales/en-US/translation.toml`
+- Generate: `frontend/editor/public/og-metadata.json`
+- Generate: `frontend/editor/public/og-metadata.saas.json`
 
 **Interfaces:**
 - Consumes: generated `/api/v1/convert/coloring-book` contracts from Task 3.
@@ -220,7 +223,7 @@ Build `ColoringBook.tsx` with `useBaseTool` and `createToolFlow` so file selecti
 
 - [ ] **Step 5: Add English-US copy and mapper coverage**
 
-Add `[home.coloringBook]` title, description, and search tags to `translation.toml`, plus concise fixed-layout guidance under a `[coloringBook]` section. Add `coloringBookOperationConfig` to `migratedToolMappers.test.ts`. Run `task pre-commit:fix` after changing the translation file.
+Add `[home.coloringBook]` title, description, and search tags to `translation.toml`, plus concise fixed-layout guidance under a `[coloringBook]` section. Add `coloringBookOperationConfig` to `migratedToolMappers.test.ts`. Run `task pre-commit:fix` after changing the translation file, then regenerate the social-preview manifests with `node editor/scripts/generate-og-metadata.mjs`.
 
 - [ ] **Step 6: Run focused frontend tests**
 
@@ -233,6 +236,7 @@ Also run:
 ```bash
 ./gradlew :proprietary:test --tests stirling.software.proprietary.service.ToolKeyRegistryTest
 ./gradlew :common:test --tests stirling.software.common.util.PdfUtilsTest
+task frontend:og:check
 ```
 
 Expected: focused form-data order and registry assertions pass. The full editor suite may report the two known baseline failures in `src/proprietary/routes/AuthCallback.test.tsx`; reproduce those against the pre-Task-4 revision and record them as baseline blockers, not Coloring Book failures. No new test failures may be introduced.
@@ -240,7 +244,7 @@ Expected: focused form-data order and registry assertions pass. The full editor 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add frontend/editor/src/core/types/toolId.ts app/proprietary/src/main/java/stirling/software/proprietary/service/ToolKeyRegistry.java app/proprietary/src/test/java/stirling/software/proprietary/service/ToolKeyRegistryTest.java frontend/editor/src/core/hooks/tools/coloringBook frontend/editor/src/core/tools/ColoringBook.tsx frontend/editor/src/core/data/useTranslatedToolRegistry.tsx frontend/editor/src/core/hooks/tools/shared/migratedToolMappers.test.ts frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx frontend/editor/public/locales/en-US/translation.toml
+git add frontend/editor/src/core/types/toolId.ts app/proprietary/src/main/java/stirling/software/proprietary/service/ToolKeyRegistry.java app/proprietary/src/test/java/stirling/software/proprietary/service/ToolKeyRegistryTest.java frontend/editor/src/core/hooks/tools/coloringBook frontend/editor/src/core/tools/ColoringBook.tsx frontend/editor/src/core/data/useTranslatedToolRegistry.tsx frontend/editor/src/core/hooks/tools/shared/migratedToolMappers.test.ts frontend/editor/src/core/data/coloringBookToolRegistration.test.tsx frontend/editor/public/locales/en-US/translation.toml frontend/editor/public/og-metadata.json frontend/editor/public/og-metadata.saas.json
 git commit -m "feat: add Coloring Book frontend tool"
 ```
 
@@ -255,6 +259,7 @@ git commit -m "feat: add Coloring Book frontend tool"
 Run:
 ```bash
 task tool-models:check
+task frontend:og:check
 task backend:check
 task frontend:check
 task engine:check
