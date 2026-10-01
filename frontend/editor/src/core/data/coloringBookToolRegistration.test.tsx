@@ -25,8 +25,15 @@ describe("coloring book tool registration", () => {
     expect(tool.endpoints).toEqual(["coloring-book"]);
     expect(tool.maxFiles).toBe(-1);
     expect(tool.operationConfig).toBe(coloringBookOperationConfig);
-    expect(tool.supportedFormats).toEqual(
-      TOOL_IO[COLORING_BOOK_ENDPOINT]?.inputExtensions,
-    );
+
+    const generatedToolIo = TOOL_IO[COLORING_BOOK_ENDPOINT];
+    expect(generatedToolIo).toBeDefined();
+    if (!generatedToolIo) {
+      throw new Error("Coloring Book TOOL_IO entry is missing");
+    }
+
+    expect(generatedToolIo.inputExtensions).not.toHaveLength(0);
+    expect(generatedToolIo.inputExtensions.length).toBeGreaterThan(0);
+    expect(tool.supportedFormats).toEqual(generatedToolIo.inputExtensions);
   });
 });

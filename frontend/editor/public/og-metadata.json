@@ -265,6 +265,11 @@
       "title": "Create a PDF Booklet - Stirling PDF",
       "description": "Create booklets with proper page ordering and multi-page layout for printing and binding"
     },
+    "coloringBook": {
+      "image": "/og_images/home.png",
+      "title": "Coloring Book - Stirling PDF",
+      "description": "Turn one or more images into a duplex-ready coloring book PDF with a blank page after every image page"
+    },
     "pdfTextEditor": {
       "image": "/og_images/pdf-text-editor.png",
       "title": "Edit PDF Text - Stirling PDF",
@@ -822,6 +827,7 @@
     "/replace-color": "replaceColor",
     "/show-j-s": "showJS",
     "/booklet-imposition": "bookletImposition",
+    "/coloring-book": "coloringBook",
     "/pdf-text-editor": "pdfTextEditor",
     "/form-fill": "formFill",
     "/auto-form-detection": "autoFormDetection",
@@ -1039,6 +1045,10 @@
     {
       "path": "/classify",
       "label": "Classify"
+    },
+    {
+      "path": "/coloring-book",
+      "label": "Coloring Book"
     },
     {
       "path": "/single-large-page",

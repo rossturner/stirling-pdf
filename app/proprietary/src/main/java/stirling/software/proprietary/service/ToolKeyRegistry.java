@@ -72,6 +72,7 @@ public class ToolKeyRegistry {
                     "replaceColor",
                     "showJS",
                     "bookletImposition",
+                    "coloringBook",
                     "pdfTextEditor",
                     "formFill",
                     "autoFormDetection",

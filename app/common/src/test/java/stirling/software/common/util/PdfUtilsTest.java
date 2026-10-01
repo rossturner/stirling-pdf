@@ -361,9 +361,9 @@ class PdfUtilsTest {
     }
 
     @Test
-    void imageToPdfWithBlankPages_interleavesImagesAndBlankPages() throws IOException {
+    void imageToPdfWithBlankPages_interleavesPngAndJpegImagesWithBlankPages() throws IOException {
         MockMultipartFile first = image("first.png", "png", Color.RED, 40, 40);
-        MockMultipartFile second = image("second.png", "png", Color.BLUE, 40, 40);
+        MockMultipartFile second = image("second.jpg", "jpeg", Color.BLUE, 40, 40);
 
         byte[] pdfOut =
                 PdfUtils.imageToPdfWithBlankPages(
