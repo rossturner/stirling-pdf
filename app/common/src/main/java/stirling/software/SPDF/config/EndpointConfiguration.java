@@ -369,6 +369,7 @@ public class EndpointConfiguration {
         // Adding endpoints to "Convert" group (Frontend has 15 convert endpoints)
         addEndpointToGroup("Convert", "pdf-to-img");
         addEndpointToGroup("Convert", "img-to-pdf");
+        addEndpointToGroup("Convert", "coloring-book");
         addEndpointToGroup("Convert", "pdf-to-pdfa");
         addEndpointToGroup("Convert", "pdf-to-ua");
         addEndpointToGroup("Convert", "file-to-pdf");
@@ -507,6 +508,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Java", "rotate-pdf");
         addEndpointToGroup("Java", "pdf-to-img");
         addEndpointToGroup("Java", "img-to-pdf");
+        addEndpointToGroup("Java", "coloring-book");
         addEndpointToGroup("Java", "add-password");
         addEndpointToGroup("Java", "remove-password");
         addEndpointToGroup("Java", "change-permissions");

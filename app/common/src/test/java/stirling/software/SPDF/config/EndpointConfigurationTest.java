@@ -28,6 +28,9 @@ class EndpointConfigurationTest {
                 "pdf-to-word", EndpointConfiguration.endpointKeyForUri("/api/v1/convert/pdf/word"));
         assertEquals(
                 "html-to-pdf", EndpointConfiguration.endpointKeyForUri("/api/v1/convert/html/pdf"));
+        assertEquals(
+                "coloring-book",
+                EndpointConfiguration.endpointKeyForUri("/api/v1/convert/coloring-book"));
     }
 
     @Test

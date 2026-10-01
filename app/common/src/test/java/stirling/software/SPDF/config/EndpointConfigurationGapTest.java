@@ -312,6 +312,22 @@ class EndpointConfigurationGapTest {
         }
 
         @Test
+        @DisplayName("coloring-book belongs to Convert and Java and is disabled with either group")
+        void coloringBookDependsOnConvertAndJava() {
+            EndpointConfiguration convertDisabled = buildDefault();
+            assertTrue(convertDisabled.getEndpointsForGroup("Convert").contains("coloring-book"));
+            assertTrue(convertDisabled.getEndpointsForGroup("Java").contains("coloring-book"));
+            assertTrue(convertDisabled.isEndpointEnabled("coloring-book"));
+
+            convertDisabled.disableGroup("Convert");
+            assertFalse(convertDisabled.isEndpointEnabled("coloring-book"));
+
+            EndpointConfiguration javaDisabled = buildDefault();
+            javaDisabled.disableGroup("Java");
+            assertFalse(javaDisabled.isEndpointEnabled("coloring-book"));
+        }
+
+        @Test
         @DisplayName("single-dependency endpoint (no alternatives) disabled when its tool group is")
         void singleDependencyDisabled() {
             EndpointConfiguration config = buildDefault();

@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import stirling.software.SPDF.config.EndpointConfiguration;
 import stirling.software.SPDF.config.swagger.MultiFileResponse;
 import stirling.software.SPDF.config.swagger.StandardPdfResponse;
+import stirling.software.SPDF.model.api.converters.ColoringBookRequest;
 import stirling.software.SPDF.model.api.converters.ConvertCbrToPdfRequest;
 import stirling.software.SPDF.model.api.converters.ConvertCbzToPdfRequest;
 import stirling.software.SPDF.model.api.converters.ConvertPdfToCbrRequest;
@@ -296,6 +297,34 @@ public class ConvertImgPDFController {
         return WebResponseUtils.bytesToWebResponse(
                 bytes,
                 GeneralUtils.generateFilename(file[0].getOriginalFilename(), "_converted.pdf"));
+    }
+
+    @AutoJobPostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/coloring-book",
+            resourceWeight = ResourceWeight.LARGE_WEIGHT)
+    @StandardPdfResponse
+    @ToolIO(
+            accepts = ToolFormat.IMAGE,
+            imageIOInput = true,
+            produces = ToolFormat.PDF,
+            arity = ToolArity.MISO)
+    @Operation(
+            summary = "Convert images to a coloring book PDF",
+            description =
+                    "This endpoint converts one or more images into a PDF where each generated"
+                            + " image page is followed by a blank page.")
+    public ResponseEntity<byte[]> convertToColoringBook(@ModelAttribute ColoringBookRequest request)
+            throws IOException {
+        MultipartFile[] files = request.getFileInput();
+        if (files == null || files.length == 0) {
+            throw ExceptionUtils.createFileNullOrEmptyException();
+        }
+
+        byte[] bytes = PdfUtils.imageToPdfWithBlankPages(files, pdfDocumentFactory);
+        return WebResponseUtils.bytesToWebResponse(
+                bytes,
+                GeneralUtils.generateFilename(files[0].getOriginalFilename(), "_converted.pdf"));
     }
 
     @AutoJobPostMapping(
