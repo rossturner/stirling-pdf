@@ -320,6 +320,11 @@ public class ConvertImgPDFController {
         if (files == null || files.length == 0) {
             throw ExceptionUtils.createFileNullOrEmptyException();
         }
+        for (MultipartFile file : files) {
+            if (file == null || file.isEmpty()) {
+                throw ExceptionUtils.createFileNullOrEmptyException();
+            }
+        }
 
         byte[] bytes = PdfUtils.imageToPdfWithBlankPages(files, pdfDocumentFactory);
         return WebResponseUtils.bytesToWebResponse(

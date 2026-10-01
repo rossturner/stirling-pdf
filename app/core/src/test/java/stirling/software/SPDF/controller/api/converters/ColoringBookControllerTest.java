@@ -141,4 +141,20 @@ class ColoringBookControllerTest {
             pdfUtils.verifyNoInteractions();
         }
     }
+
+    @Test
+    void convertToColoringBookRejectsEmptyMultipartPartBeforeConversion() {
+        ColoringBookRequest request = new ColoringBookRequest();
+        request.setFileInput(
+                new MultipartFile[] {
+                    new MockMultipartFile("fileInput", "empty.png", "image/png", new byte[0])
+                });
+
+        try (MockedStatic<PdfUtils> pdfUtils = Mockito.mockStatic(PdfUtils.class)) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> controller.convertToColoringBook(request));
+            pdfUtils.verifyNoInteractions();
+        }
+    }
 }
