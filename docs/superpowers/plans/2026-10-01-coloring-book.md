@@ -42,7 +42,7 @@
 | `app/core/src/test/java/stirling/software/SPDF/controller/api/converters/ColoringBookControllerTest.java` | Endpoint parameter, empty-input, and response behavior. |
 | `app/common/src/test/java/stirling/software/SPDF/config/EndpointConfigurationTest.java` | Route-to-key mapping. |
 | `app/common/src/test/java/stirling/software/SPDF/config/EndpointConfigurationGapTest.java` | Endpoint-group disable behavior. |
-| `frontend/editor/src/core/types/toolApiTypes.ts`, `toolIO.ts`, `engine/src/stirling/models/tool_models.py` | Generated API and tool-I/O contracts; update with `task tool-models`. |
+| `frontend/editor/src/core/types/toolApiTypes.ts`, `toolIO.ts`, `engine/src/stirling/models/tool_models.py`, `tool_io.py` | Generated API and tool-I/O contracts; update with `task tool-models`. |
 | `frontend/editor/src/core/types/toolId.ts` | Add the `coloringBook` tool identity. |
 | `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookParameters.ts` | Parameterless configuration and endpoint availability key. |
 | `frontend/editor/src/core/hooks/tools/coloringBook/useColoringBookOperation.ts` | Typed multi-file request and operation configuration. |
@@ -151,10 +151,11 @@ git commit -m "feat: add Coloring Book PDF endpoint"
 - Generate: `frontend/editor/src/core/types/toolApiTypes.ts`
 - Generate: `frontend/editor/src/core/types/toolIO.ts`
 - Generate: `engine/src/stirling/models/tool_models.py`
+- Generate: `engine/src/stirling/models/tool_io.py`
 
 **Interfaces:**
 - Consumes: the OpenAPI endpoint and `@ToolIO` declaration from Task 2.
-- Produces: the generated `ToolEndpoint`, `ToolApiParams`, file-field, and tool-I/O entries used by the frontend operation.
+- Produces: the generated `ToolEndpoint`, `ToolApiParams`, file-field, and tool-I/O entries used by the frontend operation and engine.
 
 - [ ] **Step 1: Generate the frontend and engine models**
 
@@ -171,7 +172,7 @@ Expected: both generated model sets are current and the command exits successful
 - [ ] **Step 3: Commit**
 
 ```bash
-git add frontend/editor/src/core/types/toolApiTypes.ts frontend/editor/src/core/types/toolIO.ts engine/src/stirling/models/tool_models.py
+git add frontend/editor/src/core/types/toolApiTypes.ts frontend/editor/src/core/types/toolIO.ts engine/src/stirling/models/tool_models.py engine/src/stirling/models/tool_io.py
 git commit -m "chore: generate Coloring Book endpoint models"
 ```
 
