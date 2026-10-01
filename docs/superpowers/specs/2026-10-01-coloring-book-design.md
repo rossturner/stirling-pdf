@@ -21,11 +21,11 @@ The existing image conversion utility expands each frame in a multi-frame TIFF t
 
 Register a dedicated tool named **Coloring Book** in the standard tool registry under `Page Formatting`. Use the standard multi-file tool flow and `FileContext` selection rather than adding a separate upload or file-processing path. Restrict the tool’s supported formats to the image formats accepted by the existing image converter and allow multiple files.
 
-The operation sends the selected images, in selected-file order, to the dedicated endpoint. Form-data construction must append image files in that order. Use the standard operation result view, preview, download, and error handling. Add the tool’s title, description, and search tags under `[home.coloringBook]` in `frontend/editor/public/locales/en-US/translation.toml`, following the neighboring home-tool entries.
+The operation sends the selected images, in selected-file order, to the dedicated endpoint. Form-data construction must append image files in that order. Use the standard operation result view, preview, download, and error handling. Use `coloring-book` as the endpoint availability key. Add the tool’s title, description, and search tags under `[home.coloringBook]` in `frontend/editor/public/locales/en-US/translation.toml`, following the neighboring home-tool entries.
 
 ### Backend
 
-Add a multipart endpoint at `POST /api/v1/convert/img/pdf/coloring-book`. Its request contains the image files and no layout options. Declare its image-to-PDF input/output contract in the endpoint metadata so the API and tool registries can identify it as a multi-input, single-PDF operation.
+Add a multipart endpoint at `POST /api/v1/convert/coloring-book`. This single-segment Convert route resolves to the distinct `coloring-book` availability key; do not nest it under `/img/pdf`, which would resolve to the existing `img-to-pdf` key. Register `coloring-book` in the `Convert` and `Java` endpoint groups. The request contains the image files and no layout options. Declare its image-to-PDF input/output contract in the endpoint metadata so the API and tool registries can identify it as a multi-input, single-PDF operation.
 
 Use a dedicated request model with only a required `MultipartFile[] fileInput`; do not reuse the general `ConvertToPdfRequest`, whose layout and color options are not part of this tool. Declare the endpoint as `@ToolIO(accepts = ToolFormat.IMAGE, imageIOInput = true, produces = ToolFormat.PDF, arity = ToolArity.MISO)`, matching the existing image-to-PDF endpoint’s input formats and arity.
 
@@ -41,7 +41,9 @@ An empty file list, unsupported or unreadable image, or conversion failure must 
 
 Backend tests must verify that multiple images, including mixed image formats, retain their input order and produce the exact image/blank sequence; that every image and blank page is portrait A4; that aspect ratio is preserved for portrait and landscape image content; and that a blank page follows the final image. A multi-frame TIFF test must verify that each frame is immediately followed by a blank page. Empty input and invalid image data must fail without returning a PDF.
 
-Frontend tests must verify the tool’s Page Formatting registration, image-only/multi-file eligibility, endpoint selection, and that form-data construction preserves selected-file order. Verify standard operation result wiring.
+Frontend tests must verify the tool’s Page Formatting registration, image-only/multi-file eligibility, use of the distinct `coloring-book` endpoint key, and that form-data construction preserves selected-file order. Verify standard operation result wiring.
+
+Endpoint configuration tests must verify that `/api/v1/convert/coloring-book` resolves to the distinct `coloring-book` key and that the endpoint is included in the `Convert` and `Java` groups.
 
 After adding the endpoint, run `task tool-models` and `task tool-models:check` to regenerate and check the frontend and engine API models. Run `task backend:check`, `task frontend:check`, and `task engine:check`.
 
