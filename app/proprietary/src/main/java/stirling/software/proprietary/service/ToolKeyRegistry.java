@@ -75,6 +75,7 @@ public class ToolKeyRegistry {
                     "pdfTextEditor",
                     "formFill",
                     "autoFormDetection",
+                    "coloringBook",
                     // CORE_SUPER_TOOL_IDS
                     "multiTool",
                     "read",
