@@ -66,6 +66,9 @@ import { extractPagesOperationConfig } from "@app/hooks/tools/extractPages/useEx
 import { ENDPOINTS as SPLIT_ENDPOINT_NAMES } from "@app/constants/splitConstants";
 import { ToolId } from "@app/types/toolId";
 import { CONVERT_SUPPORTED_FORMATS } from "@app/constants/convertSupportedFornats";
+import InterleavedPages from "@app/tools/InterleavedPages";
+import { interleavedPagesOperationConfig } from "@app/hooks/tools/interleavedPages/useInterleavedPagesOperation";
+import InterleavedPagesSettings from "@app/components/tools/interleavedPages/InterleavedPagesSettings";
 
 export interface TranslatedToolCatalog {
   allTools: ToolRegistry;
@@ -553,6 +556,22 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         automationSettings: lazySettings(
           () => import("@app/components/tools/crop/CropAutomationSettings"),
         ),
+      },
+      interleavedPages: {
+        icon: <Icon name="images" size="1.5rem" />,
+        name: t("home.interleavedPages.title", "Interleaved Pages"),
+        component: InterleavedPages,
+        description: t(
+          "home.interleavedPages.desc",
+          "Combine images into a PDF with blank pages for duplex printing"
+        ),
+        categoryId: ToolCategoryId.STANDARD_TOOLS,
+        subcategoryId: SubcategoryId.PAGE_FORMATTING,
+        maxFiles: -1,
+        endpoints: ["general/interleaved-pages"],
+        operationConfig: interleavedPagesOperationConfig,
+        settingsComponent: InterleavedPagesSettings,
+        supportsAutomate: true,
       },
       rotate: {
         icon: <Icon name="rotate-cw" size="1.5rem" />,
