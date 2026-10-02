@@ -3629,6 +3629,15 @@ tooltip = "This operation will use your cloud credits"
 [color.eyeDropper]
 tooltip = "Pick color from screen"
 
+[coloringBook]
+filenamePrefix = "coloring_book"
+filePrompt = "Select images to create coloring book pages."
+submit = "Create Coloring Book"
+title = "Coloring Book Results"
+
+[coloringBook.error]
+failed = "An error occurred while creating the coloring book."
+
 [colorPicker]
 hue = "Hue"
 saturation = "Saturation and brightness"
@@ -5608,6 +5617,10 @@ title = "Change Permissions"
 [home.classify]
 desc = "Identify what kind of document this is and tag it."
 title = "Classify"
+
+[home.coloringBook]
+desc = "Turn images into printable coloring book pages."
+title = "Coloring Book"
 
 [home.compare]
 desc = "Compares and shows the differences between 2 PDF Documents"

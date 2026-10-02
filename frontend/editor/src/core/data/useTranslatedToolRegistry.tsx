@@ -40,6 +40,7 @@ import { changePermissionsOperationConfig } from "@app/hooks/tools/changePermiss
 import { certSignOperationConfig } from "@app/hooks/tools/certSign/useCertSignOperation";
 import { timestampPdfOperationConfig } from "@app/hooks/tools/timestampPdf/useTimestampPdfOperation";
 import { bookletImpositionOperationConfig } from "@app/hooks/tools/bookletImposition/useBookletImpositionOperation";
+import { coloringBookOperationConfig } from "@app/hooks/tools/coloringBook/useColoringBookOperation";
 import { mergeOperationConfig } from "@app/hooks/tools/merge/useMergeOperation";
 import { editTableOfContentsOperationConfig } from "@app/hooks/tools/editTableOfContents/useEditTableOfContentsOperation";
 import { autoRenameOperationConfig } from "@app/hooks/tools/autoRename/useAutoRenameOperation";
@@ -692,6 +693,21 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
         endpoints: ["booklet-imposition"],
+      },
+      coloringBook: {
+        icon: <Icon name="book-open" size="1.5rem" />,
+        name: t("home.coloringBook.title", "Coloring Book"),
+        component: lazy(() => import("@app/tools/ColoringBook")),
+        description: t(
+          "home.coloringBook.desc",
+          "Turn images into printable coloring book pages.",
+        ),
+        categoryId: ToolCategoryId.STANDARD_TOOLS,
+        subcategoryId: SubcategoryId.PAGE_FORMATTING,
+        maxFiles: -1,
+        endpoints: ["coloring-book"],
+        operationConfig: asRegistryConfig(coloringBookOperationConfig),
+        automationSettings: null,
       },
       pdfToSinglePage: {
         icon: <Icon name="single-page" size="1.5rem" />,

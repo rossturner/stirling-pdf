@@ -66,6 +66,7 @@ export const URL_TO_TOOL_MAP: Record<string, ToolId> = {
   "/page-layout": "pageLayout",
   "/scale-pages": "scalePages",
   "/booklet-imposition": "bookletImposition",
+  "/coloring-book": "coloringBook",
 
   // Splitting tools
   "/auto-split-pdf": "split",
