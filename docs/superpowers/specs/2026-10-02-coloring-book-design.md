@@ -32,7 +32,7 @@ Reject empty or unreadable image input through the existing API error path. Repo
 
 ## Verification
 
-Backend tests cover page count, A4 portrait dimensions, image order, blank even pages, and proportional image placement. Frontend tests cover the new tool operation and registry entry.
+Backend tests cover page count, A4 portrait dimensions, image order, blank even pages, proportional image placement, and errors for empty or unreadable input. Frontend tests cover the new tool operation, selected file order, and registry entry.
 
 Run `task backend:check` and `task frontend:check`. After translation changes, run `task pre-commit:fix`.
 
