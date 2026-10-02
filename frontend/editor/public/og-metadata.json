@@ -280,6 +280,11 @@
       "title": "Auto Form Detection - Stirling PDF",
       "description": "Automatically detect form fields with AI and make your PDF fillable."
     },
+    "interleavedPages": {
+      "image": "/og_images/home.png",
+      "title": "Interleaved Pages - Stirling PDF",
+      "description": "Combine images into a PDF with blank pages for duplex printing"
+    },
     "multiTool": {
       "image": "/og_images/multi-tool.png",
       "title": "PDF Page Editor - Stirling PDF",
@@ -825,6 +830,7 @@
     "/pdf-text-editor": "pdfTextEditor",
     "/form-fill": "formFill",
     "/auto-form-detection": "autoFormDetection",
+    "/interleaved-pages": "interleavedPages",
     "/multi-tool": "multiTool",
     "/read": "read",
     "/automate": "automate",
@@ -1111,6 +1117,10 @@
     {
       "path": "/img-to-pdf",
       "label": "Image to PDF Converter"
+    },
+    {
+      "path": "/interleaved-pages",
+      "label": "Interleaved Pages"
     },
     {
       "path": "/markdown-to-pdf",

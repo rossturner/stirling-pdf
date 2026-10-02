@@ -1,4 +1,7 @@
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useAllFiles, useFileManagement } from "@app/contexts/FileContext";
+import { StirlingFile } from "@app/types/fileContext";
 import { createToolFlow } from "@app/components/tools/shared/createToolFlow";
 import { useInterleavedPagesParameters } from "@app/hooks/tools/interleavedPages/useInterleavedPagesParameters";
 import { useInterleavedPagesOperation } from "@app/hooks/tools/interleavedPages/useInterleavedPagesOperation";
@@ -10,6 +13,8 @@ import { useInterleavedPagesTips } from "@app/components/tooltips/useInterleaved
 const InterleavedPages = (props: BaseToolProps) => {
   const { t } = useTranslation();
   const tips = useInterleavedPagesTips();
+  const { fileIds } = useAllFiles();
+  const { reorderFiles, removeFiles } = useFileManagement();
   const base = useBaseTool(
     "interleavedPages",
     useInterleavedPagesParameters,
@@ -17,14 +22,27 @@ const InterleavedPages = (props: BaseToolProps) => {
     props
   );
 
+  const handleFilesChange = useCallback(
+    (files: File[]) => {
+      const orderedIds = (files as StirlingFile[]).map((f) => f.fileId);
+      const remainingIds = fileIds.filter((id) => !orderedIds.includes(id));
+      reorderFiles([...orderedIds, ...remainingIds]);
+    },
+    [fileIds, reorderFiles],
+  );
+
+  const handleRemoveFile = useCallback(
+    (index: number) => {
+      const file = base.selectedFiles[index];
+      if (file) void removeFiles([file.fileId]);
+    },
+    [base.selectedFiles, removeFiles],
+  );
+
   return createToolFlow({
     files: {
       selectedFiles: base.selectedFiles,
       isCollapsed: base.hasResults,
-      placeholder: t(
-        "interleavedPages.files.placeholder",
-        "Drag images here or click to select. They'll appear on odd pages with blank pages on the back."
-      ),
     },
     steps: [
       {
@@ -33,11 +51,8 @@ const InterleavedPages = (props: BaseToolProps) => {
         content: (
           <InterleavedPagesSettings
             files={base.selectedFiles}
-            onFilesChange={(files) => base.setSelectedFiles(files)}
-            onRemoveFile={(index) => {
-              const newFiles = base.selectedFiles.filter((_, i) => i !== index);
-              base.setSelectedFiles(newFiles);
-            }}
+            onFilesChange={handleFilesChange}
+            onRemoveFile={handleRemoveFile}
           />
         ),
       },
