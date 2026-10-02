@@ -5683,6 +5683,10 @@ desc = "Grabs any and all information possible on PDFs"
 tags = "info,metadata,details,PDF info,document info,properties,file info,get info,show info,view properties,document properties,statistics,page count,file details,inspect"
 title = "Get ALL Info on PDF"
 
+[home.interleavedPages]
+desc = "Combine images into a PDF with blank pages for duplex printing"
+title = "Interleaved Pages"
+
 [home.manageCertificates]
 tags = "certificates,import,export,manage certificates,digital certificates,certificate management,PFX,P12,keystore,import certificate,export certificate,certificate store,PKI"
 title = "Manage Certificates"
@@ -6019,6 +6023,38 @@ xLarge = "Extra Large"
 header = "Markdown To PDF"
 tags = "markup,web-content,transformation,convert,md"
 title = "Markdown To PDF"
+
+[interleavedPages]
+submit = "Create PDF"
+
+[interleavedPages.error]
+emptyFileList = "Please select at least one image"
+failed = "Failed to create interleaved PDF. Please check your images and try again."
+invalidImage = "File is not a valid image format"
+
+[interleavedPages.files]
+placeholder = "Drag images here or click to select. They'll appear on odd pages with blank pages on the back."
+
+[interleavedPages.results]
+title = "Your PDF is Ready"
+
+[interleavedPages.settings]
+moveDown = "Move down"
+moveUp = "Move up"
+remove = "Remove file"
+reorder = "{{count}} images → {{pages}} pages"
+
+[interleavedPages.steps]
+settings = "Reorder Images"
+
+[interleavedPages.tooltip]
+header = { title = "Interleaved Pages" }
+
+[interleavedPages.tooltip.description]
+bullet1 = "Perfect for coloring books and print-on-demand projects"
+bullet2 = "Save paper by printing on both sides"
+text = "Combines multiple images into a single PDF with blank pages on the back of each image, perfect for duplex printing and creating coloring books."
+title = "What does this tool do?"
 
 [merge]
 goToFileEditor = "Go to file editor"
