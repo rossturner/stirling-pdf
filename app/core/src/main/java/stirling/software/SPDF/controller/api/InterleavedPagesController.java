@@ -1,6 +1,8 @@
 package stirling.software.SPDF.controller.api;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -39,6 +41,8 @@ public class InterleavedPagesController {
 
     private static final float A4_WIDTH = 595f;
     private static final float A4_HEIGHT = 842f;
+    private static final DateTimeFormatter FILENAME_TIMESTAMP =
+            DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 
     private final CustomPDFDocumentFactory pdfDocumentFactory;
     private final TempFileManager tempFileManager;
@@ -72,32 +76,34 @@ public class InterleavedPagesController {
 
         try (PDDocument document = pdfDocumentFactory.createNewDocument()) {
             for (MultipartFile imageFile : files) {
+                byte[] imageBytes = imageFile.getBytes();
+                PDImageXObject pdImage;
                 try {
-                    PDImageXObject pdImage =
-                            PDImageXObject.createFromByteArray(document, imageFile.getBytes(), "");
-
-                    ScaledDimensions scaled =
-                            calculateImageScaling(pdImage.getWidth(), pdImage.getHeight());
-
-                    addImagePageAndBlankPage(
-                            document,
-                            pdImage,
-                            scaled.scaledWidth(),
-                            scaled.scaledHeight(),
-                            scaled.xOffset(),
-                            scaled.yOffset());
+                    pdImage = PDImageXObject.createFromByteArray(document, imageBytes, "");
                 } catch (IOException e) {
-                    log.error("Failed to process image: {}", imageFile.getOriginalFilename(), e);
-                    throw new IOException(
+                    log.error("Failed to decode image: {}", imageFile.getOriginalFilename(), e);
+                    throw new IllegalArgumentException(
                             String.format(
-                                    "Failed to process image '%s'. Is it a valid image file?",
+                                    "File '%s' is not a supported image format",
                                     imageFile.getOriginalFilename()),
                             e);
                 }
+
+                ScaledDimensions scaled =
+                        calculateImageScaling(pdImage.getWidth(), pdImage.getHeight());
+
+                addImagePageAndBlankPage(
+                        document,
+                        pdImage,
+                        scaled.scaledWidth(),
+                        scaled.scaledHeight(),
+                        scaled.xOffset(),
+                        scaled.yOffset());
             }
 
-            return WebResponseUtils.pdfDocToWebResponse(
-                    document, "interleaved.pdf", tempFileManager);
+            String filename =
+                    "interleaved_" + LocalDateTime.now().format(FILENAME_TIMESTAMP) + ".pdf";
+            return WebResponseUtils.pdfDocToWebResponse(document, filename, tempFileManager);
         }
     }
 
