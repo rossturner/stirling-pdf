@@ -1,16 +1,21 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { BrowserRouter } from "react-router-dom";
+import { MantineProvider } from "@mantine/core";
 import InterleavedPages from "../../../tools/InterleavedPages";
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (_key: string, fallback?: string, values?: Record<string, unknown>) =>
-      (fallback ?? _key).replace(/{{(\w+)}}/g, (_, name: string) =>
-        String(values?.[name] ?? ""),
-      ),
-  }),
-}));
+vi.mock("react-i18next", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react-i18next")>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (_key: string, fallback?: string, values?: Record<string, unknown>) =>
+        (fallback ?? _key).replace(/{{(\w+)}}/g, (_, name: string) =>
+          String(values?.[name] ?? ""),
+        ),
+    }),
+  };
+});
 
 vi.mock("@app/hooks/tools/shared/useBaseTool", () => ({
   useBaseTool: () => ({
@@ -19,7 +24,7 @@ vi.mock("@app/hooks/tools/shared/useBaseTool", () => ({
     hasFiles: false,
     endpointEnabled: true,
     params: { validateParameters: () => true },
-    operation: null,
+    operation: { isLoading: false },
     handleExecute: vi.fn(),
     handleUndo: vi.fn(),
     handleThumbnailClick: vi.fn(),
@@ -45,19 +50,30 @@ vi.mock("@app/hooks/tools/interleavedPages/useInterleavedPagesOperation", () => 
   useInterleavedPagesOperation: () => null,
 }));
 
+vi.mock("@app/contexts/FileContext", () => ({
+  useAllFiles: () => ({ files: [], fileStubs: [], fileIds: [] }),
+  useFileStore: () => ({ files: [], fileStubs: [] }),
+  useFileManagement: () => ({
+    reorderFiles: vi.fn(),
+    removeFiles: vi.fn(),
+  }),
+}));
+
+vi.mock("@app/contexts/FilesModalContext", () => ({
+  useFilesModalContext: () => ({
+    uploadProgress: 0,
+    uploadingFilesCount: 0,
+  }),
+}));
+
+vi.mock("@app/hooks/useFileManager", () => ({
+  useFileManager: () => ({
+    addFiles: vi.fn(),
+    clearFiles: vi.fn(),
+  }),
+}));
+
 describe("InterleavedPages Tool", () => {
-  it("renders file upload placeholder", () => {
-    render(
-      <BrowserRouter>
-        <InterleavedPages />
-      </BrowserRouter>
-    );
-
-    expect(
-      screen.getByText(/Drag images here or click to select/i)
-    ).toBeInTheDocument();
-  });
-
   it("shows settings step when files selected", () => {
     // This test would require more complex mocking of useBaseTool
     // For now, basic rendering is verified

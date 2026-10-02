@@ -1,15 +1,20 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+import { MantineProvider } from "@mantine/core";
 import InterleavedPagesSettings from "./InterleavedPagesSettings";
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (_key: string, fallback?: string, values?: Record<string, unknown>) =>
-      (fallback ?? _key).replace(/{{(\w+)}}/g, (_, name: string) =>
-        String(values?.[name] ?? ""),
-      ),
-  }),
-}));
+vi.mock("react-i18next", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react-i18next")>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (_key: string, fallback?: string, values?: Record<string, unknown>) =>
+        (fallback ?? _key).replace(/{{(\w+)}}/g, (_, name: string) =>
+          String(values?.[name] ?? ""),
+        ),
+    }),
+  };
+});
 
 describe("InterleavedPagesSettings", () => {
   const mockFiles = [
@@ -18,17 +23,27 @@ describe("InterleavedPagesSettings", () => {
     new File(["content3"], "image3.jpg", { type: "image/jpeg" }),
   ];
 
+  const renderSettings = (
+    files: File[],
+    onChange: ReturnType<typeof vi.fn>,
+    onRemove: ReturnType<typeof vi.fn>
+  ) => {
+    return render(
+      <MantineProvider>
+        <InterleavedPagesSettings
+          files={files}
+          onFilesChange={onChange}
+          onRemoveFile={onRemove}
+        />
+      </MantineProvider>
+    );
+  };
+
   it("renders file list with correct count", () => {
     const onChange = vi.fn();
     const onRemove = vi.fn();
 
-    render(
-      <InterleavedPagesSettings
-        files={mockFiles}
-        onFilesChange={onChange}
-        onRemoveFile={onRemove}
-      />
-    );
+    renderSettings(mockFiles, onChange, onRemove);
 
     // Should show count summary
     expect(screen.getByText(/3 images → 6 pages/i)).toBeInTheDocument();
@@ -38,13 +53,7 @@ describe("InterleavedPagesSettings", () => {
     const onChange = vi.fn();
     const onRemove = vi.fn();
 
-    render(
-      <InterleavedPagesSettings
-        files={mockFiles}
-        onFilesChange={onChange}
-        onRemoveFile={onRemove}
-      />
-    );
+    renderSettings(mockFiles, onChange, onRemove);
 
     const removeButtons = screen.getAllByLabelText("Remove file");
     fireEvent.click(removeButtons[0]);
@@ -56,13 +65,7 @@ describe("InterleavedPagesSettings", () => {
     const onChange = vi.fn();
     const onRemove = vi.fn();
 
-    render(
-      <InterleavedPagesSettings
-        files={mockFiles}
-        onFilesChange={onChange}
-        onRemoveFile={onRemove}
-      />
-    );
+    renderSettings(mockFiles, onChange, onRemove);
 
     const upButtons = screen.getAllByLabelText("Move up");
     // Second file's up button should work
@@ -78,13 +81,7 @@ describe("InterleavedPagesSettings", () => {
     const onChange = vi.fn();
     const onRemove = vi.fn();
 
-    render(
-      <InterleavedPagesSettings
-        files={mockFiles}
-        onFilesChange={onChange}
-        onRemoveFile={onRemove}
-      />
-    );
+    renderSettings(mockFiles, onChange, onRemove);
 
     const upButtons = screen.getAllByLabelText("Move up");
     expect(upButtons[0]).toBeDisabled();
@@ -94,13 +91,7 @@ describe("InterleavedPagesSettings", () => {
     const onChange = vi.fn();
     const onRemove = vi.fn();
 
-    render(
-      <InterleavedPagesSettings
-        files={mockFiles}
-        onFilesChange={onChange}
-        onRemoveFile={onRemove}
-      />
-    );
+    renderSettings(mockFiles, onChange, onRemove);
 
     const downButtons = screen.getAllByLabelText("Move down");
     expect(downButtons[downButtons.length - 1]).toBeDisabled();
