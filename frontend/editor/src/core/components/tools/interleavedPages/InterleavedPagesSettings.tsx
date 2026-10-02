@@ -20,7 +20,12 @@ const FileThumbnail = ({ file }: { file: File }) => {
       src={url}
       alt={file.name}
       draggable={false}
-      style={{ maxWidth: "100px", height: "100px", objectFit: "contain", marginTop: "8px" }}
+      style={{
+        maxWidth: "100px",
+        height: "100px",
+        objectFit: "contain",
+        marginTop: "8px",
+      }}
     />
   );
 };
@@ -31,7 +36,11 @@ interface InterleavedPagesSettingsProps {
   onRemoveFile: (index: number) => void;
 }
 
-export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }: InterleavedPagesSettingsProps) => {
+export const InterleavedPagesSettings = ({
+  files,
+  onFilesChange,
+  onRemoveFile,
+}: InterleavedPagesSettingsProps) => {
   const { t } = useTranslation();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -68,10 +77,14 @@ export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }:
   return (
     <Stack gap="md">
       <Text size="sm" c="dimmed">
-        {t("interleavedPages.settings.reorder", "{{count}} images → {{pages}} pages", {
-          count: files.length,
-          pages: files.length * 2,
-        })}
+        {t(
+          "interleavedPages.settings.reorder",
+          "{{count}} images → {{pages}} pages",
+          {
+            count: files.length,
+            pages: files.length * 2,
+          },
+        )}
       </Text>
 
       <SimpleGrid cols={3} spacing="md">
@@ -84,7 +97,10 @@ export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }:
             onDrop={() => handleDrop(index)}
             onDragEnd={() => setDraggedIndex(null)}
             style={{
-              border: draggedIndex === index ? "2px solid var(--c-primary)" : "1px solid var(--c-border)",
+              border:
+                draggedIndex === index
+                  ? "2px solid var(--c-primary)"
+                  : "1px solid var(--c-border)",
               borderRadius: "8px",
               padding: "12px",
               textAlign: "center",
@@ -114,7 +130,10 @@ export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }:
                 accent="neutral"
                 onClick={() => moveDown(index)}
                 disabled={index === files.length - 1}
-                aria-label={t("interleavedPages.settings.moveDown", "Move down")}
+                aria-label={t(
+                  "interleavedPages.settings.moveDown",
+                  "Move down",
+                )}
                 leftSection={<Icon name="chevron-down" size="1rem" />}
               />
               <Button
@@ -122,7 +141,10 @@ export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }:
                 variant="tertiary"
                 accent="danger"
                 onClick={() => onRemoveFile(index)}
-                aria-label={t("interleavedPages.settings.remove", "Remove file")}
+                aria-label={t(
+                  "interleavedPages.settings.remove",
+                  "Remove file",
+                )}
                 leftSection={<Icon name="x" size="1rem" />}
               />
             </Group>
