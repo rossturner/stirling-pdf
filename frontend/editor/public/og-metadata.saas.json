@@ -281,6 +281,11 @@
       "title": "Auto Form Detection - Stirling PDF",
       "description": "Automatically detect form fields with AI and make your PDF fillable."
     },
+    "coloringBook": {
+      "image": "/og_images/home.png",
+      "title": "Coloring Book - Stirling PDF",
+      "description": "Turn images into printable coloring book pages."
+    },
     "multiTool": {
       "image": "/og_images/multi-tool.png",
       "title": "PDF Page Editor - Stirling PDF",
@@ -833,6 +838,7 @@
     "/pdf-text-editor": "pdfTextEditor",
     "/form-fill": "formFill",
     "/auto-form-detection": "autoFormDetection",
+    "/coloring-book": "coloringBook",
     "/multi-tool": "multiTool",
     "/read": "read",
     "/automate": "automate",
@@ -1048,6 +1054,10 @@
     {
       "path": "/classify",
       "label": "Classify"
+    },
+    {
+      "path": "/coloring-book",
+      "label": "Coloring Book"
     },
     {
       "path": "/single-large-page",
