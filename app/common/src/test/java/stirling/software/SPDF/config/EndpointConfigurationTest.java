@@ -2,8 +2,11 @@ package stirling.software.SPDF.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import stirling.software.common.model.ApplicationProperties;
 
 class EndpointConfigurationTest {
 
@@ -35,5 +38,14 @@ class EndpointConfigurationTest {
         assertNull(EndpointConfiguration.endpointKeyForUri(null));
         assertNull(EndpointConfiguration.endpointKeyForUri("/some-page"));
         assertNull(EndpointConfiguration.endpointKeyForUri("/api/v1/general"));
+    }
+
+    @Test
+    void coloringBookEndpointIsInConvertAndJavaGroups() {
+        EndpointConfiguration configuration =
+                new EndpointConfiguration(new ApplicationProperties(), false, null);
+
+        assertTrue(configuration.getEndpointsForGroup("Convert").contains("coloring-book"));
+        assertTrue(configuration.getEndpointsForGroup("Java").contains("coloring-book"));
     }
 }
