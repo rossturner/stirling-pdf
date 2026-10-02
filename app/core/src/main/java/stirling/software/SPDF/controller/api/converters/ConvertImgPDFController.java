@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import stirling.software.SPDF.config.EndpointConfiguration;
 import stirling.software.SPDF.config.swagger.MultiFileResponse;
 import stirling.software.SPDF.config.swagger.StandardPdfResponse;
+import stirling.software.SPDF.model.api.converters.ColoringBookRequest;
 import stirling.software.SPDF.model.api.converters.ConvertCbrToPdfRequest;
 import stirling.software.SPDF.model.api.converters.ConvertCbzToPdfRequest;
 import stirling.software.SPDF.model.api.converters.ConvertPdfToCbrRequest;
@@ -296,6 +297,31 @@ public class ConvertImgPDFController {
         return WebResponseUtils.bytesToWebResponse(
                 bytes,
                 GeneralUtils.generateFilename(file[0].getOriginalFilename(), "_converted.pdf"));
+    }
+
+    @AutoJobPostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/coloring-book",
+            resourceWeight = ResourceWeight.LARGE_WEIGHT)
+    @StandardPdfResponse
+    @ToolIO(
+            accepts = ToolFormat.IMAGE,
+            imageIOInput = true,
+            produces = ToolFormat.PDF,
+            arity = ToolArity.MISO)
+    @Operation(
+            summary = "Create a coloring book PDF",
+            description =
+                    "Converts each input image into a portrait A4 PDF page with aspect-preserving"
+                            + " scaling and a blank page on the back.")
+    public ResponseEntity<byte[]> convertToColoringBookPdf(
+            @ModelAttribute ColoringBookRequest request) throws IOException {
+        MultipartFile[] files = request.getFileInput();
+        byte[] bytes = PdfUtils.imageToPdfWithBlankPages(files, pdfDocumentFactory);
+        return WebResponseUtils.bytesToWebResponse(
+                bytes,
+                GeneralUtils.generateFilename(
+                        files[0].getOriginalFilename(), "_coloring_book.pdf"));
     }
 
     @AutoJobPostMapping(

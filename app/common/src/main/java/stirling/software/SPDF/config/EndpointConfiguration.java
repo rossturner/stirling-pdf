@@ -393,6 +393,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Convert", "pdf-to-json");
         addEndpointToGroup("Convert", "json-to-pdf");
         addEndpointToGroup("Convert", "pdf-to-rtf");
+        addEndpointToGroup("Convert", "coloring-book");
 
         // Adding endpoints to "Security" group
         addEndpointToGroup("Security", "add-password");
@@ -548,6 +549,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Java", "pdf-to-json");
         addEndpointToGroup("Java", "json-to-pdf");
         addEndpointToGroup("Java", "pdf-to-video");
+        addEndpointToGroup("Java", "coloring-book");
         addEndpointToGroup("Java", "verify-pdf");
         addEndpointToGroup("Java", "pdf-to-ua");
         addEndpointToGroup("Java", "accessibility-report");

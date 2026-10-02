@@ -452,9 +452,29 @@ public class PdfUtils {
         try (PDDocument doc = pdfDocumentFactory.createNewDocument()) {
             for (MultipartFile file : files) {
                 if (isTiff(file)) {
-                    appendTiffFrames(doc, file, fitOption, autoRotate, colorType);
+                    appendTiffFrames(doc, file, fitOption, autoRotate, colorType, false);
                 } else {
-                    appendSingleImage(doc, file, fitOption, autoRotate, colorType);
+                    appendSingleImage(doc, file, fitOption, autoRotate, colorType, false);
+                }
+            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            doc.save(byteArrayOutputStream);
+            log.debug("PDF successfully saved to byte array");
+            return byteArrayOutputStream.toByteArray();
+        }
+    }
+
+    public byte[] imageToPdfWithBlankPages(
+            MultipartFile[] files, CustomPDFDocumentFactory pdfDocumentFactory) throws IOException {
+        if (files == null || files.length == 0) {
+            throw new IllegalArgumentException("At least one image file is required");
+        }
+        try (PDDocument doc = pdfDocumentFactory.createNewDocument()) {
+            for (MultipartFile file : files) {
+                if (isTiff(file)) {
+                    appendTiffFrames(doc, file, "maintainAspectRatio", false, "color", true);
+                } else {
+                    appendSingleImage(doc, file, "maintainAspectRatio", false, "color", true);
                 }
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -499,7 +519,8 @@ public class PdfUtils {
             MultipartFile file,
             String fitOption,
             boolean autoRotate,
-            String colorType)
+            String colorType,
+            boolean addBlankBacks)
             throws IOException {
         try (InputStream input = file.getInputStream();
                 ImageInputStream imageInput = ImageIO.createImageInputStream(input)) {
@@ -512,6 +533,9 @@ public class PdfUtils {
                             ImageProcessingUtils.convertColorType(reader.read(i), colorType);
                     PDImageXObject pdImage = LosslessFactory.createFromImage(doc, convertedImage);
                     addImageToDocument(doc, pdImage, fitOption, autoRotate);
+                    if (addBlankBacks) {
+                        doc.addPage(new PDPage(PDRectangle.A4));
+                    }
                 }
             } finally {
                 reader.dispose();
@@ -524,7 +548,8 @@ public class PdfUtils {
             MultipartFile file,
             String fitOption,
             boolean autoRotate,
-            String colorType)
+            String colorType,
+            boolean addBlankBack)
             throws IOException {
         BufferedImage image = ImageProcessingUtils.loadImageWithExifOrientation(file);
         BufferedImage convertedImage = ImageProcessingUtils.convertColorType(image, colorType);
@@ -535,6 +560,9 @@ public class PdfUtils {
                         ? JPEGFactory.createFromImage(doc, convertedImage)
                         : LosslessFactory.createFromImage(doc, convertedImage);
         addImageToDocument(doc, pdImage, fitOption, autoRotate);
+        if (addBlankBack) {
+            doc.addPage(new PDPage(PDRectangle.A4));
+        }
     }
 
     public void addImageToDocument(

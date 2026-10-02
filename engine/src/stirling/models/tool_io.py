@@ -82,6 +82,7 @@ class ToolIOSpec(ApiModel):
 TOOL_IO: dict[ToolEndpoint, ToolIOSpec] = {
     ToolEndpoint.CBR_TO_PDF: ToolIOSpec(accepts=[ToolFormat.CBR], produces=ToolFormat.PDF, arity=ToolArity.SISO),
     ToolEndpoint.CBZ_TO_PDF: ToolIOSpec(accepts=[ToolFormat.CBZ], produces=ToolFormat.PDF, arity=ToolArity.SISO),
+    ToolEndpoint.COLORING_BOOK: ToolIOSpec(accepts=[ToolFormat.IMAGE], produces=ToolFormat.PDF, arity=ToolArity.MISO),
     ToolEndpoint.EBOOK_TO_PDF: ToolIOSpec(accepts=[ToolFormat.EBOOK], produces=ToolFormat.PDF, arity=ToolArity.SISO),
     ToolEndpoint.EML_TO_PDF: ToolIOSpec(accepts=[ToolFormat.EMAIL], produces=ToolFormat.PDF, arity=ToolArity.SISO),
     ToolEndpoint.FILE_TO_PDF: ToolIOSpec(accepts=[ToolFormat.ANY], produces=ToolFormat.PDF, arity=ToolArity.SISO),
