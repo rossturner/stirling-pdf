@@ -24,6 +24,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
@@ -450,18 +451,56 @@ public class PdfUtils {
             CustomPDFDocumentFactory pdfDocumentFactory)
             throws IOException {
         try (PDDocument doc = pdfDocumentFactory.createNewDocument()) {
-            for (MultipartFile file : files) {
-                if (isTiff(file)) {
-                    appendTiffFrames(doc, file, fitOption, autoRotate, colorType);
-                } else {
-                    appendSingleImage(doc, file, fitOption, autoRotate, colorType);
-                }
-            }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            doc.save(byteArrayOutputStream);
-            log.debug("PDF successfully saved to byte array");
-            return byteArrayOutputStream.toByteArray();
+            appendImages(doc, files, fitOption, autoRotate, colorType);
+            return saveToBytes(doc);
         }
+    }
+
+    /**
+     * Lays each image on its own A4 page (aspect ratio kept, landscape images on landscape A4) and
+     * follows every image page with a blank page of the same size, so a duplex print leaves the
+     * back of each image empty. A multi-frame TIFF contributes one image page per frame.
+     *
+     * <p>Throws if any image cannot be decoded: skipping one would move every later image onto the
+     * back of a sheet.
+     */
+    public byte[] imagesToColoringBook(
+            MultipartFile[] files, CustomPDFDocumentFactory pdfDocumentFactory) throws IOException {
+        try (PDDocument doc = pdfDocumentFactory.createNewDocument()) {
+            appendImages(doc, files, "maintainAspectRatio", true, "color");
+            PDPageTree pages = doc.getPages();
+            List<PDPage> imagePages = new ArrayList<>();
+            pages.forEach(imagePages::add);
+            for (PDPage imagePage : imagePages) {
+                PDRectangle size = imagePage.getMediaBox();
+                pages.insertAfter(
+                        new PDPage(new PDRectangle(size.getWidth(), size.getHeight())), imagePage);
+            }
+            return saveToBytes(doc);
+        }
+    }
+
+    private void appendImages(
+            PDDocument doc,
+            MultipartFile[] files,
+            String fitOption,
+            boolean autoRotate,
+            String colorType)
+            throws IOException {
+        for (MultipartFile file : files) {
+            if (isTiff(file)) {
+                appendTiffFrames(doc, file, fitOption, autoRotate, colorType);
+            } else {
+                appendSingleImage(doc, file, fitOption, autoRotate, colorType);
+            }
+        }
+    }
+
+    private byte[] saveToBytes(PDDocument doc) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        doc.save(byteArrayOutputStream);
+        log.debug("PDF successfully saved to byte array");
+        return byteArrayOutputStream.toByteArray();
     }
 
     /**

@@ -12,6 +12,7 @@ import {
   LinkToolRegistry,
 } from "@app/data/toolsTaxonomy";
 import { isSuperToolId, isLinkToolId } from "@app/types/toolId";
+import { toolIOFor } from "@app/types/toolIO";
 import {
   asRegistryConfig,
   lazySettings,
@@ -29,6 +30,10 @@ import { repairOperationConfig } from "@app/hooks/tools/repair/useRepairOperatio
 import { addWatermarkOperationConfig } from "@app/hooks/tools/addWatermark/useAddWatermarkOperation";
 import { addStampOperationConfig } from "@app/components/tools/addStamp/useAddStampOperation";
 import { addAttachmentsOperationConfig } from "@app/hooks/tools/addAttachments/useAddAttachmentsOperation";
+import {
+  coloringBookOperationConfig,
+  COLORING_BOOK_ENDPOINT,
+} from "@app/hooks/tools/coloringBook/useColoringBookOperation";
 import { createPortfolioOperationConfig } from "@app/hooks/tools/createPortfolio/useCreatePortfolioOperation";
 import { unlockPdfFormsOperationConfig } from "@app/hooks/tools/unlockPdfForms/useUnlockPdfFormsOperation";
 import { autoFormDetectionOperationConfig } from "@app/hooks/tools/autoFormDetection/useAutoFormDetectionOperation";
@@ -692,6 +697,23 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
         endpoints: ["booklet-imposition"],
+      },
+      coloringBook: {
+        icon: <Icon name="palette" size="1.5rem" />,
+        name: t("home.coloringBook.title", "Coloring Book"),
+        component: lazy(() => import("@app/tools/ColoringBook")),
+        description: t(
+          "home.coloringBook.desc",
+          "Turn images into a printable coloring book with a blank back behind every page",
+        ),
+        categoryId: ToolCategoryId.STANDARD_TOOLS,
+        subcategoryId: SubcategoryId.PAGE_FORMATTING,
+        maxFiles: -1,
+        endpoints: ["coloring-book"],
+        supportedFormats: toolIOFor(COLORING_BOOK_ENDPOINT)?.inputExtensions,
+        operationConfig: asRegistryConfig(coloringBookOperationConfig),
+        automationSettings: null,
+        synonyms: getSynonyms(t, "coloringBook"),
       },
       pdfToSinglePage: {
         icon: <Icon name="single-page" size="1.5rem" />,

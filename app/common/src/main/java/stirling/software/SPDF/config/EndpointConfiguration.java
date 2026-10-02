@@ -355,6 +355,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("PageOps", "auto-rotate-pdf");
         addEndpointToGroup("PageOps", "multi-page-layout");
         addEndpointToGroup("PageOps", "booklet-imposition");
+        addEndpointToGroup("PageOps", "coloring-book");
         addEndpointToGroup("PageOps", "scale-pages");
         addEndpointToGroup("PageOps", "crop");
         addEndpointToGroup("PageOps", "pdf-to-single-page");
@@ -519,6 +520,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Java", "remove-cert-sign");
         addEndpointToGroup("Java", "multi-page-layout");
         addEndpointToGroup("Java", "booklet-imposition");
+        addEndpointToGroup("Java", "coloring-book");
         addEndpointToGroup("Java", "scale-pages");
         addEndpointToGroup("Java", "add-page-numbers");
         addEndpointToGroup("Java", "auto-rename");

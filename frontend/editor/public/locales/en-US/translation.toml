@@ -3629,6 +3629,28 @@ tooltip = "This operation will use your cloud credits"
 [color.eyeDropper]
 tooltip = "Pick color from screen"
 
+[coloringBook]
+submit = "Create coloring book"
+
+[coloringBook.error]
+failed = "An error occurred while creating the coloring book."
+
+[coloringBook.info]
+text = "Each picture gets its own page followed by a blank page, ready to print double-sided."
+title = "Double-sided printing"
+
+[coloringBook.results]
+title = "Coloring book"
+
+[coloringBook.tooltip.description]
+bullet1 = "Pictures go in the same order as your files. Reorder them in the file editor."
+bullet2 = "Every page is A4. Wide pictures get a landscape page."
+text = "Puts each picture on its own page with a blank page after it, so when you print double-sided the back of every picture is empty and colors can't show through."
+title = "What it does"
+
+[coloringBook.tooltip.header]
+title = "About coloring books"
+
 [colorPicker]
 hue = "Hue"
 saturation = "Saturation and brightness"
@@ -5608,6 +5630,11 @@ title = "Change Permissions"
 [home.classify]
 desc = "Identify what kind of document this is and tag it."
 title = "Classify"
+
+[home.coloringBook]
+desc = "Turn images into a printable coloring book with a blank back behind every page"
+tags = "coloring book,colouring book,coloring pages,colouring pages,kids,print,double-sided,duplex,blank pages,images to pdf"
+title = "Coloring Book"
 
 [home.compare]
 desc = "Compares and shows the differences between 2 PDF Documents"

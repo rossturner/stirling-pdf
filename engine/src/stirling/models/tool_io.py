@@ -218,6 +218,7 @@ TOOL_IO: dict[ToolEndpoint, ToolIOSpec] = {
         ],
     ),
     ToolEndpoint.AUTO_SPLIT_PDF: ToolIOSpec(accepts=[ToolFormat.PDF], produces=ToolFormat.PDF, arity=ToolArity.SIMO),
+    ToolEndpoint.COLORING_BOOK: ToolIOSpec(accepts=[ToolFormat.IMAGE], produces=ToolFormat.PDF, arity=ToolArity.MISO),
     ToolEndpoint.COMPRESS_PDF: ToolIOSpec(accepts=[ToolFormat.PDF], produces=ToolFormat.PDF, arity=ToolArity.SISO),
     ToolEndpoint.CREATE_PORTFOLIO: ToolIOSpec(accepts=[ToolFormat.ANY], produces=ToolFormat.PDF, arity=ToolArity.MISO),
     ToolEndpoint.DELETE_ATTACHMENT: ToolIOSpec(accepts=[ToolFormat.PDF], produces=ToolFormat.PDF, arity=ToolArity.SISO),

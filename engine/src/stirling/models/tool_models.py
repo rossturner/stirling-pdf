@@ -370,6 +370,12 @@ class CbzToPdfParams(ApiModel):
     optimize_for_ebook: bool = Field(False, description="Optimize the output PDF for ebook reading using Ghostscript")
 
 
+class ColoringBookParams(ApiModel):
+    """
+    Places each image on its own A4 page, in order, and follows every image page with a blank page so the back of each image is empty when printed double-sided. Input:IMAGE Output:PDF Type:MISO
+    """
+
+
 class LineArtEdgeLevel(IntEnum):
     """
     Edge detection strength to use for line art conversion (1-3). This maps to ImageMagick's -edge radius.
@@ -1851,6 +1857,7 @@ class Model(
         | AutoRenameParams
         | AutoRotatePdfParams
         | AutoSplitPdfParams
+        | ColoringBookParams
         | CompressPdfParams
         | CreatePortfolioParams
         | DeleteAttachmentParams
@@ -1930,6 +1937,7 @@ class Model(
         | AutoRenameParams
         | AutoRotatePdfParams
         | AutoSplitPdfParams
+        | ColoringBookParams
         | CompressPdfParams
         | CreatePortfolioParams
         | DeleteAttachmentParams
@@ -2010,6 +2018,7 @@ type ParamToolModel = (
     | AutoRenameParams
     | AutoRotatePdfParams
     | AutoSplitPdfParams
+    | ColoringBookParams
     | CompressPdfParams
     | CreatePortfolioParams
     | DeleteAttachmentParams
@@ -2091,6 +2100,7 @@ class ToolEndpoint(StrEnum):
     AUTO_RENAME = "/api/v1/misc/auto-rename"
     AUTO_ROTATE_PDF = "/api/v1/misc/auto-rotate-pdf"
     AUTO_SPLIT_PDF = "/api/v1/misc/auto-split-pdf"
+    COLORING_BOOK = "/api/v1/misc/coloring-book"
     COMPRESS_PDF = "/api/v1/misc/compress-pdf"
     CREATE_PORTFOLIO = "/api/v1/misc/create-portfolio"
     DELETE_ATTACHMENT = "/api/v1/misc/delete-attachment"
@@ -2170,6 +2180,7 @@ OPERATIONS: dict[ToolEndpoint, ParamToolModelType] = {
     ToolEndpoint.AUTO_RENAME: AutoRenameParams,
     ToolEndpoint.AUTO_ROTATE_PDF: AutoRotatePdfParams,
     ToolEndpoint.AUTO_SPLIT_PDF: AutoSplitPdfParams,
+    ToolEndpoint.COLORING_BOOK: ColoringBookParams,
     ToolEndpoint.COMPRESS_PDF: CompressPdfParams,
     ToolEndpoint.CREATE_PORTFOLIO: CreatePortfolioParams,
     ToolEndpoint.DELETE_ATTACHMENT: DeleteAttachmentParams,
