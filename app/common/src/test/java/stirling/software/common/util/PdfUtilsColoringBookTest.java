@@ -121,6 +121,14 @@ class PdfUtilsColoringBookTest {
                 () -> PdfUtils.imageToPdfWithBlankPages(new MultipartFile[0], factory));
     }
 
+    @Test
+    void malformedImageFailsWithFileReadException() {
+        MockMultipartFile malformedImage =
+                new MockMultipartFile("fileInput", "page.png", "image/png", new byte[] {1});
+
+        assertThrows(ExceptionUtils.FileReadException.class, () -> convert(malformedImage));
+    }
+
     private static byte[] convert(MockMultipartFile... files) throws IOException {
         return PdfUtils.imageToPdfWithBlankPages(files, newFactory());
     }
