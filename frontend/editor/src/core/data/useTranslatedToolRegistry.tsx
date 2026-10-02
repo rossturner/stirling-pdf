@@ -66,6 +66,8 @@ import { extractPagesOperationConfig } from "@app/hooks/tools/extractPages/useEx
 import { ENDPOINTS as SPLIT_ENDPOINT_NAMES } from "@app/constants/splitConstants";
 import { ToolId } from "@app/types/toolId";
 import { CONVERT_SUPPORTED_FORMATS } from "@app/constants/convertSupportedFornats";
+import { coloringBookOperationConfig } from "@app/hooks/tools/coloringBook/useColoringBookOperation";
+import { TOOL_IO } from "@app/types/toolIO";
 
 export interface TranslatedToolCatalog {
   allTools: ToolRegistry;
@@ -73,6 +75,19 @@ export interface TranslatedToolCatalog {
   superTools: SuperToolRegistry;
   linkTools: LinkToolRegistry;
 }
+
+const COLORING_BOOK_ENDPOINT = "/api/v1/convert/coloring-book";
+const COLORING_BOOK_IO = TOOL_IO[COLORING_BOOK_ENDPOINT];
+
+if (!COLORING_BOOK_IO) {
+  throw new Error(`Missing TOOL_IO entry for ${COLORING_BOOK_ENDPOINT}`);
+}
+
+if (!COLORING_BOOK_IO.inputExtensions?.length) {
+  throw new Error(`Missing inputExtensions for ${COLORING_BOOK_ENDPOINT}`);
+}
+
+const COLORING_BOOK_SUPPORTED_FORMATS = [...COLORING_BOOK_IO.inputExtensions];
 
 // Hook to get the translated tool registry
 export function useTranslatedToolCatalog(): TranslatedToolCatalog {
@@ -692,6 +707,23 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
         endpoints: ["booklet-imposition"],
+      },
+      coloringBook: {
+        icon: <Icon name="book-open" size="1.5rem" />,
+        name: t("home.coloringBook.title", "Coloring Book"),
+        component: lazy(() => import("@app/tools/ColoringBook")),
+        description: t(
+          "home.coloringBook.desc",
+          "Turn one or more images into a duplex-ready coloring book PDF with a blank page after every image page",
+        ),
+        categoryId: ToolCategoryId.STANDARD_TOOLS,
+        subcategoryId: SubcategoryId.PAGE_FORMATTING,
+        maxFiles: -1,
+        supportedFormats: COLORING_BOOK_SUPPORTED_FORMATS,
+        endpoints: ["coloring-book"],
+        operationConfig: asRegistryConfig(coloringBookOperationConfig),
+        automationSettings: null,
+        synonyms: getSynonyms(t, "coloringBook"),
       },
       pdfToSinglePage: {
         icon: <Icon name="single-page" size="1.5rem" />,

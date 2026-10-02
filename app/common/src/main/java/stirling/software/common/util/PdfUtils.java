@@ -464,6 +464,27 @@ public class PdfUtils {
         }
     }
 
+    public byte[] imageToPdfWithBlankPages(
+            MultipartFile[] files, CustomPDFDocumentFactory pdfDocumentFactory) throws IOException {
+        byte[] pdfBytes =
+                imageToPdf(files, "maintainAspectRatio", false, "color", pdfDocumentFactory);
+
+        try (PDDocument sourceDocument = pdfDocumentFactory.load(pdfBytes);
+                PDDocument outputDocument = pdfDocumentFactory.createNewDocument()) {
+            int pageCount = sourceDocument.getNumberOfPages();
+            for (int i = 0; i < pageCount; i++) {
+                PDPage sourcePage = sourceDocument.getPage(i);
+                PDPage importedPage = outputDocument.importPage(sourcePage);
+                importedPage.setResources(sourcePage.getResources());
+                outputDocument.addPage(new PDPage(PDRectangle.A4));
+            }
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            outputDocument.save(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        }
+    }
+
     /**
      * A TIFF is recognised by declared content type as well as filename suffix: an extensionless
      * upload would otherwise take the single-image path and silently drop every frame but one.
