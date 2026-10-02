@@ -2,7 +2,28 @@ import { Group, Stack, Text, Badge, SimpleGrid } from "@mantine/core";
 import { Button } from "@app/ui/Button";
 import { Icon } from "@app/ui/Icon";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const FileThumbnail = ({ file }: { file: File }) => {
+  const [url, setUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const objectUrl = URL.createObjectURL(file);
+    setUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+
+  if (!url) return <div style={{ height: "100px", marginTop: "8px" }} />;
+
+  return (
+    <img
+      src={url}
+      alt={file.name}
+      draggable={false}
+      style={{ maxWidth: "100px", height: "100px", objectFit: "contain", marginTop: "8px" }}
+    />
+  );
+};
 
 interface InterleavedPagesSettingsProps {
   files: File[];
@@ -72,6 +93,7 @@ export const InterleavedPagesSettings = ({ files, onFilesChange, onRemoveFile }:
             }}
           >
             <Badge>{index + 1}</Badge>
+            <FileThumbnail file={file} />
             <Text size="xs" truncate mt="xs">
               {file.name}
             </Text>
